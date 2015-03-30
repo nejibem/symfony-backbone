@@ -39,8 +39,12 @@
 - name: symfony install assets
   command: php app/console assets:install web chdir=/var/www/{{ site_url }}
 
-#- name: symfony dump assets
-#  command: php app/console assetic:dump chdir=/var/www/{{ site_url }}
-#
+- name: symfony dump assets
+  command: php app/console assetic:dump chdir=/var/www/{{ site_url }}
+
+- name: symfony clear cache
+  command: php app/console cache:clear chdir=/var/www/{{ site_url }}
+
+
 #- name: doctrine generate migrations
 #  command: php app/console doctrine:migrations:migrate --no-interaction chdir=/var/www/{{ site_url }}
