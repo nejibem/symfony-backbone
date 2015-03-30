@@ -1,0 +1,46 @@
+---
+- name: ensure site directory
+  action: file dest=/var/www/{{ site_url }} state=directory owner={{ ansible_ssh_user }} group=www-data mode=0775 recurse=yes
+  when: env != 'dev'
+
+- name: git checkout
+  git: repo={{ repo_url }} dest=/var/www/{{ site_url }} remote={{ repo_remote }} version={{ repo_version }} accept_hostkey=yes force=yes
+  sudo: false
+  when: env != 'dev'
+
+- name: setup symfony config dist
+  template: src=parameters.yml dest=/var/www/{{ site_url }}/app/config/parameters.yml.dist.ansible
+  sudo: false
+
+- name: setup symfony config
+  template: src=parameters.yml dest=/var/www/{{ site_url }}/app/config/parameters.yml
+  sudo: false
+
+- name: vendor dir exists
+  stat: path=/var/www/{{ site_url }}/vendor
+  register: vendor
+
+- name: composer install packages
+  command: composer --no-interaction install chdir=/var/www/{{ site_url }}
+  sudo: false
+  when: vendor.stat.exists == False
+
+- name: composer update packages
+  command: composer --no-interaction update chdir=/var/www/{{ site_url }}
+  sudo: false
+  when: vendor.stat.isdir is defined and vendor.stat.isdir and composer == "update"
+
+- name: symfony ensure log directory
+  action: file dest=/var/www/{{ site_url }}/app/logs/ state=directory owner={{ ansible_ssh_user }} group=www-data mode=0775 recurse=yes
+
+- name: symfony ensure cache directory
+  action: file dest=/var/www/{{ site_url }}/app/cache/ state=directory owner={{ ansible_ssh_user }} group=www-data mode=0775 recurse=yes
+
+- name: symfony install assets
+  command: php app/console assets:install web chdir=/var/www/{{ site_url }}
+
+#- name: symfony dump assets
+#  command: php app/console assetic:dump chdir=/var/www/{{ site_url }}
+#
+#- name: doctrine generate migrations
+#  command: php app/console doctrine:migrations:migrate --no-interaction chdir=/var/www/{{ site_url }}
