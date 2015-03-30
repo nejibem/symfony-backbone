@@ -1,0 +1,20 @@
+# This file is auto-generated during ANSIBLE DEPLOY
+parameters:
+    database_driver: pdo_mysql
+    database_host: localhost
+    database_port: null
+    database_name: backbone
+    database_user: backbone
+    database_password: backbone
+
+    mailer_transport: smtp
+    mailer_host: smtp.gmail.com
+    mailer_user: kanskje.denne.gang@gmail.com
+    mailer_password: sghkasoihzsdnewwa8723rn
+    mailer_encryption: ssl
+
+    locale: en
+    secret: ThisTokenIsNotSoSecretChangeIt
+    debug_toolbar: true
+    debug_redirects: false
+    use_assetic_controller: true
