@@ -1,6 +1,6 @@
 <?php
 
-namespace Nejibem\ApiBundle\Entity;
+namespace ApiBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
@@ -39,9 +39,9 @@ class Blurb
     private $createdDate;
 
     /**
-     * @var \Nejibem\ApiBundle\Entity\MyUser
+     * @var \ApiBundle\Entity\MyUser
      *
-     * @ORM\ManyToOne(targetEntity="Nejibem\ApiBundle\Entity\MyUser")
+     * @ORM\ManyToOne(targetEntity="ApiBundle\Entity\MyUser")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      * })
@@ -49,9 +49,9 @@ class Blurb
     private $user;
 
     /**
-     * @var \Nejibem\ApiBundle\Entity\Blurb
+     * @var \ApiBundle\Entity\Blurb
      *
-     * @ORM\ManyToOne(targetEntity="Nejibem\ApiBundle\Entity\Blurb")
+     * @ORM\ManyToOne(targetEntity="ApiBundle\Entity\Blurb")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      * })
@@ -114,10 +114,10 @@ class Blurb
     /**
      * Set user
      *
-     * @param \Nejibem\ApiBundle\Entity\MyUser $user
+     * @param \ApiBundle\Entity\MyUser $user
      * @return Blurb
      */
-    public function setUser(\Nejibem\ApiBundle\Entity\MyUser $user = null)
+    public function setUser(\ApiBundle\Entity\MyUser $user = null)
     {
         $this->user = $user;
 
@@ -127,7 +127,7 @@ class Blurb
     /**
      * Get user
      *
-     * @return \Nejibem\ApiBundle\Entity\MyUser 
+     * @return \ApiBundle\Entity\MyUser
      */
     public function getUser()
     {
@@ -137,10 +137,10 @@ class Blurb
     /**
      * Set parent
      *
-     * @param \Nejibem\ApiBundle\Entity\Blurb $parent
+     * @param \ApiBundle\Entity\Blurb $parent
      * @return Blurb
      */
-    public function setParent(\Nejibem\ApiBundle\Entity\Blurb $parent = null)
+    public function setParent(\ApiBundle\Entity\Blurb $parent = null)
     {
         $this->parent = $parent;
 
@@ -150,7 +150,7 @@ class Blurb
     /**
      * Get parent
      *
-     * @return \Nejibem\ApiBundle\Entity\Blurb 
+     * @return \ApiBundle\Entity\Blurb
      */
     public function getParent()
     {

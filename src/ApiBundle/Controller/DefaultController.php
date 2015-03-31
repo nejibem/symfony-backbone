@@ -1,6 +1,6 @@
 <?php
 
-namespace Nejibem\ApiBundle\Controller;
+namespace ApiBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -8,6 +8,6 @@ class DefaultController extends Controller
 {
     public function indexAction()
     {
-        return $this->render('NejibemApiBundle:Default:index.html.twig');
+        return $this->render('ApiBundle:Default:index.html.twig');
     }
 }

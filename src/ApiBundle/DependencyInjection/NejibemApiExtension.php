@@ -1,6 +1,6 @@
 <?php
 
-namespace Nejibem\ApiBundle\DependencyInjection;
+namespace ApiBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;

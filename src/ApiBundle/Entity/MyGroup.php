@@ -1,6 +1,6 @@
 <?php
 
-namespace Nejibem\ApiBundle\Entity;
+namespace ApiBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -38,7 +38,7 @@ class MyGroup
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="Nejibem\ApiBundle\Entity\MyUser", mappedBy="group")
+     * @ORM\ManyToMany(targetEntity="ApiBundle\Entity\MyUser", mappedBy="group")
      */
     private $user;
 
@@ -110,10 +110,10 @@ class MyGroup
     /**
      * Add user
      *
-     * @param \Nejibem\ApiBundle\Entity\MyUser $user
+     * @param \ApiBundle\Entity\MyUser $user
      * @return MyGroup
      */
-    public function addUser(\Nejibem\ApiBundle\Entity\MyUser $user)
+    public function addUser(\ApiBundle\Entity\MyUser $user)
     {
         $this->user[] = $user;
 
@@ -123,9 +123,9 @@ class MyGroup
     /**
      * Remove user
      *
-     * @param \Nejibem\ApiBundle\Entity\MyUser $user
+     * @param \ApiBundle\Entity\MyUser $user
      */
-    public function removeUser(\Nejibem\ApiBundle\Entity\MyUser $user)
+    public function removeUser(\ApiBundle\Entity\MyUser $user)
     {
         $this->user->removeElement($user);
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Nejibem\ApiBundle\Form;
+namespace ApiBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -25,7 +25,7 @@ class BlurbType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Nejibem\ApiBundle\Entity\Blurb',
+            'data_class' => 'ApiBundle\Entity\Blurb',
             'csrf_protection' => false
         ));
     }

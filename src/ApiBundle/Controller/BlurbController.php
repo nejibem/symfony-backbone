@@ -1,6 +1,6 @@
 <?php
 
-namespace Nejibem\ApiBundle\Controller;
+namespace ApiBundle\Controller;
 
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -8,8 +8,8 @@ use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\RestBundle\Util\Codes;
 use Symfony\Component\HttpFoundation\Request;
 
-use Nejibem\ApiBundle\Entity\Blurb;
-use Nejibem\ApiBundle\Form\BlurbType;
+use ApiBundle\Entity\Blurb;
+use ApiBundle\Form\BlurbType;
 
 class BlurbController extends FOSRestController implements ClassResourceInterface
 {
@@ -23,7 +23,7 @@ class BlurbController extends FOSRestController implements ClassResourceInterfac
     public function cgetAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $entities = $em->getRepository('NejibemApiBundle:Blurb')->findAll();
+        $entities = $em->getRepository('ApiBundle:Blurb')->findAll();
 
         return array(
             'blurbs' => $entities,
@@ -127,7 +127,7 @@ class BlurbController extends FOSRestController implements ClassResourceInterfac
     protected function getEntity($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('NejibemApiBundle:Blurb')->find($id);
+        $entity = $em->getRepository('ApiBundle:Blurb')->find($id);
 
         if (!$entity)
         {

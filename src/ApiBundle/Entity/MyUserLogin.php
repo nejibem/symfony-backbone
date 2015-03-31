@@ -1,6 +1,6 @@
 <?php
 
-namespace Nejibem\ApiBundle\Entity;
+namespace ApiBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -36,9 +36,9 @@ class MyUserLogin
     private $createdDate;
 
     /**
-     * @var \Nejibem\ApiBundle\Entity\MyUser
+     * @var \ApiBundle\Entity\MyUser
      *
-     * @ORM\ManyToOne(targetEntity="Nejibem\ApiBundle\Entity\MyUser")
+     * @ORM\ManyToOne(targetEntity="ApiBundle\Entity\MyUser")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      * })
@@ -106,10 +106,10 @@ class MyUserLogin
     /**
      * Set user
      *
-     * @param \Nejibem\ApiBundle\Entity\MyUser $user
+     * @param \ApiBundle\Entity\MyUser $user
      * @return MyUserLogin
      */
-    public function setUser(\Nejibem\ApiBundle\Entity\MyUser $user = null)
+    public function setUser(\ApiBundle\Entity\MyUser $user = null)
     {
         $this->user = $user;
 
@@ -119,7 +119,7 @@ class MyUserLogin
     /**
      * Get user
      *
-     * @return \Nejibem\ApiBundle\Entity\MyUser 
+     * @return \ApiBundle\Entity\MyUser
      */
     public function getUser()
     {
