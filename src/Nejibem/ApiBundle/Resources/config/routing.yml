@@ -1,0 +1,3 @@
+nejibem_api_blurb:
+    type: rest
+    resource: Nejibem\ApiBundle\Controller\BlurbController

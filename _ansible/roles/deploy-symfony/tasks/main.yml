@@ -45,6 +45,5 @@
 - name: symfony clear cache for {{ env }}
   command: php app/console cache:clear --env={{ env }} chdir=/var/www/{{ site_url }}
 
-
-#- name: doctrine generate migrations
-#  command: php app/console doctrine:migrations:migrate --env={{ env }} --no-interaction chdir=/var/www/{{ site_url }}
+- name: doctrine generate migrations
+  command: php app/console doctrine:migrations:migrate --env={{ env }} --no-interaction chdir=/var/www/{{ site_url }}

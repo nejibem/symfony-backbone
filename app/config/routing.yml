@@ -1,3 +1,9 @@
-app:
-    resource: "@AppBundle/Controller/"
-    type:     annotation
+nejibem_api:
+    prefix: /api
+    type: rest
+    resource: "@NejibemApiBundle/Resources/config/routing.yml"
+
+
+#app:
+#    resource: "@AppBundle/Controller/"
+#    type:     annotation
