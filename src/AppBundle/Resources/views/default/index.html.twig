@@ -3,3 +3,26 @@
 {% block body %}
     Homepage.
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+
+        //(function(){
+        //    "use strict"
+
+            console.log('Hello World!');
+
+            var Blurb = Backbone.Model.extend({
+                defaults: {
+                    blurb: {
+                        text: '...'
+                    }
+                },
+                urlRoot: '/api/blurbs'
+            });
+
+        //})();
+
+    </script>
+{% endblock %}
