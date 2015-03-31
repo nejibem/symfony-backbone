@@ -3,7 +3,6 @@ nejibem_api:
     type: rest
     resource: "@NejibemApiBundle/Resources/config/routing.yml"
 
-
-#app:
-#    resource: "@AppBundle/Controller/"
-#    type:     annotation
+app:
+    resource: "@AppBundle/Controller/"
+    type:     annotation
