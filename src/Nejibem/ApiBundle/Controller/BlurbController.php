@@ -26,7 +26,7 @@ class BlurbController extends FOSRestController implements ClassResourceInterfac
         $entities = $em->getRepository('NejibemApiBundle:Blurb')->findAll();
 
         return array(
-            'entities' => $entities,
+            'blurbs' => $entities,
         );
     }
 
@@ -42,7 +42,7 @@ class BlurbController extends FOSRestController implements ClassResourceInterfac
         $entity = $this->getEntity($id);
 
         return array(
-            'entity' => $entity,
+            'blurb' => $entity,
         );
     }
 
@@ -94,6 +94,7 @@ class BlurbController extends FOSRestController implements ClassResourceInterfac
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
+
             return $this->view(null, Codes::HTTP_NO_CONTENT);
         }
 

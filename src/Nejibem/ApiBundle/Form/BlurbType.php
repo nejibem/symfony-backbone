@@ -35,6 +35,6 @@ class BlurbType extends AbstractType
      */
     public function getName()
     {
-        return 'nejibem_apibundle_blurb';
+        return 'blurb';
     }
 }

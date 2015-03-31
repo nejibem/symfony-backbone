@@ -3,6 +3,8 @@
 namespace Nejibem\ApiBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Blurb
@@ -154,4 +156,20 @@ class Blurb
     {
         return $this->parent;
     }
+
+    /**
+     *  Validate Entity
+     */
+    public static function loadValidatorMetadata(ClassMetadata $metadata)
+    {
+        $metadata->addPropertyConstraint('text', new Assert\NotBlank(array(
+            'message' => 'This value must not be blank',
+        )));
+
+        $metadata->addPropertyConstraint('text', new Assert\Regex(array(
+            'pattern' => '/^[a-zA-Z0-9\., ]+$/i',
+            'message' => 'Blurb may only contain letters, numbers, spaces and basic punctuation (,.)',
+        )));
+    }
+
 }
