@@ -55,11 +55,14 @@ class BlurbController extends FOSRestController implements ClassResourceInterfac
      */
     public function cpostAction(Request $request)
     {
-        $entity = new Blurb();
-        $form = $this->createForm(new BlurbType(), $entity);
-        $form->bind($request);
+        //return $request->request->get('text');
+        $validator = $this->get('validator');
 
-        if ($form->isValid())
+        $entity = new Blurb();
+        $entity->setText($request->request->get('text'));
+
+        $errors = $validator->validate($entity);
+        if (count($errors) === 0)
         {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
@@ -75,8 +78,9 @@ class BlurbController extends FOSRestController implements ClassResourceInterfac
         }
 
         return array(
-            'form' => $form,
+            'errors' => $errors,
         );
+
     }
 
     /**
@@ -87,11 +91,13 @@ class BlurbController extends FOSRestController implements ClassResourceInterfac
      */
     public function putAction(Request $request, $id)
     {
-        $entity = $this->getEntity($id);
-        $form = $this->createForm(new BlurbType(), $entity);
-        $form->bind($request);
+        $validator = $this->get('validator');
 
-        if ($form->isValid())
+        $entity = $this->getEntity($id);
+        $entity->setText($request->request->get('text'));
+
+        $errors = $validator->validate($entity);
+        if (count($errors) === 0)
         {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
@@ -101,7 +107,7 @@ class BlurbController extends FOSRestController implements ClassResourceInterfac
         }
 
         return array(
-            'form' => $form,
+            'errors' => $errors,
         );
     }
 
