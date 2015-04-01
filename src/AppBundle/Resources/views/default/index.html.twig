@@ -3,8 +3,19 @@
 {% block body %}
 
     <h1>Homepage</h1>
-
-    <div id="page"></div>
+    <hr>
+    <div id="blurb-add">
+        <form id="blurb-add-form">
+            <div class="form-group">
+                <textarea name="text" class="form-control" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-default">Submit</button>
+            </div>
+        </form>
+    </div>
+    <div id="blurb-list">
+    </div>
 
 {% endblock %}
 
@@ -16,6 +27,28 @@
         //    "use strict"
 
             console.log('Hello World!');
+
+            function htmlEncode(value){
+                return $('<div/>').text(value).html();
+            }
+
+            $.fn.serializeObject = function() {
+                var o = {};
+                var a = this.serializeArray();
+                $.each(a, function() {
+                    if (o[this.name] !== undefined) {
+                        if (!o[this.name].push) {
+                            o[this.name] = [o[this.name]];
+                        }
+                        o[this.name].push(this.value || '');
+                    } else {
+                        o[this.name] = this.value || '';
+                    }
+                });
+                return o;
+            };
+
+
 
             var Blurb = Backbone.Model.extend({
                 defaults: {
@@ -34,26 +67,57 @@
             });
 
 
+            var BlurbAddView = Backbone.View.extend({
+                el: '#blurb-add',
+                events: {
+                    'submit #blurb-add-form': 'saveBlurb'
+                },
+
+                saveBlurb: function (ev) {
+                    console.log('saveBlurb');
+
+                    var blurbDetails = $(ev.currentTarget).serializeObject();
+                    console.log(blurbDetails);
+                    var blurb = new Blurb();
+                    blurb.save(blurbDetails, {
+                        success: function (blurb) {
+
+                            $("#add-blurb-form textarea").html('');
+                            router.navigate('', {trigger:true});
+
+                        }
+                    });
+                    return false;
+                },
+
+                render: function() {
+                    console.log('BlurbAddView render');
+                    //var self = this;
+                    //var html = $('#blurb-add-template').html();
+                    //console.log(html);
+                    //self.$el.html(html);
+                }
+
+            });
+
+            var blurbAddView = new BlurbAddView({ model: Blurb });
 
             var BlurbListView = Backbone.View.extend({
-                el: '#page',
+                el: '#blurb-list',
+
                 render: function() {
                     var self = this;
                     var blurbs = new Blurbs();
-
                     blurbs.fetch({
                         success: function(blurbs) {
-
                             _.each(blurbs.models, function(blurb){
                                 console.log(blurb.get('text'));
                             });
-
                             var template = _.template($('#blurb-list-template').html());
                             var html = template({bs: blurbs.models});
                             self.$el.html(html);
                         }
                     });
-
                 }
             });
 
@@ -71,6 +135,7 @@
             router.on('route:home', function(){
                 console.log('route:home');
                 blurbListView.render();
+                blurbAddView.render();
             });
 
 
@@ -82,7 +147,7 @@
     </script>
 
     <script type="text/template" id="blurb-list-template">
-        <h4>Blurb List</h4>
+        <h3>Blurb List</h3>
         <ul>
             <% _.each(bs, function(blurb) { %>
             <li><%= blurb.get('text') %></li>
