@@ -49,8 +49,16 @@
             };
 
 
+            var Blurbs = Backbone.Collection.extend({
+                //model: Blurb,
+                url: '/api/blurbs',
+                initialize: function() {
+                    console.log("Blurb Collection is initialized");
+                }
+            });
 
             var Blurb = Backbone.Model.extend({
+                collection: Blurbs,
                 defaults: {
                     id: null,
                     text: '...'
@@ -58,13 +66,7 @@
                 urlRoot: '/api/blurbs'
             });
 
-            var Blurbs = Backbone.Collection.extend({
-                model: Blurb,
-                url: '/api/blurbs',
-                initialize: function() {
-                    console.log("Blurb Collection is initialized");
-                }
-            });
+
 
 
             var BlurbAddView = Backbone.View.extend({
@@ -85,14 +87,15 @@
                         success: function (blurb) {
                             console.log('start save');
                             $("#add-blurb-form textarea").html('');
-                            router.navigate('', {trigger:true});
+                            router.navigate('added/'+blurb.id, {trigger: true});
                             console.log('end save');
                         },
                         error: function (blurb) {
                             console.log('blurb save error!');
                         }
                     });
-                    return false;
+                    console.log('saveBlurb end');
+                    //return false;
                 },
 
                 render: function() {
@@ -132,7 +135,8 @@
 
             var Router = Backbone.Router.extend({
                 routes: {
-                    "" : "home"
+                    "": "home",
+                    "added/:id": "added"
                 }
             });
 
@@ -143,7 +147,11 @@
                 blurbAddView.render();
             });
 
-
+            router.on('route:added', function(){
+                console.log('route:added');
+                blurbListView.render();
+                blurbAddView.render();
+            });
 
             Backbone.history.start();
 
