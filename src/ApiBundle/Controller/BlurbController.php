@@ -68,13 +68,7 @@ class BlurbController extends FOSRestController implements ClassResourceInterfac
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirectView(
-                $this->generateUrl(
-                    'get_blurbs',
-                    array('id' => $entity->getId())
-                ),
-                Codes::HTTP_CREATED
-            );
+            return $this->view($entity, Codes::HTTP_CREATED);
         }
 
         return array(

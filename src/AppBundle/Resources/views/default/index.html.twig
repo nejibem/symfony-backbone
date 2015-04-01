@@ -75,16 +75,21 @@
 
                 saveBlurb: function (ev) {
                     console.log('saveBlurb');
+                    ev.preventDefault();
 
                     var blurbDetails = $(ev.currentTarget).serializeObject();
                     console.log(blurbDetails);
+
                     var blurb = new Blurb();
                     blurb.save(blurbDetails, {
                         success: function (blurb) {
-
+                            console.log('start save');
                             $("#add-blurb-form textarea").html('');
                             router.navigate('', {trigger:true});
-
+                            console.log('end save');
+                        },
+                        error: function (blurb) {
+                            console.log('blurb save error!');
                         }
                     });
                     return false;
