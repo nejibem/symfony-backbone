@@ -1,7 +1,11 @@
 {% extends 'AppBundle::base.html.twig' %}
 
 {% block body %}
-    Homepage.
+
+    <h1>Homepage</h1>
+
+    <div id="page"></div>
+
 {% endblock %}
 
 {% block javascripts %}
@@ -15,14 +19,75 @@
 
             var Blurb = Backbone.Model.extend({
                 defaults: {
-                    blurb: {
-                        text: '...'
-                    }
+                    id: null,
+                    text: '...'
                 },
                 urlRoot: '/api/blurbs'
             });
 
+            var Blurbs = Backbone.Collection.extend({
+                model: Blurb,
+                url: '/api/blurbs',
+                initialize: function() {
+                    console.log("Blurb Collection is initialized");
+                }
+            });
+
+
+
+            var BlurbListView = Backbone.View.extend({
+                el: '#page',
+                render: function() {
+                    var self = this;
+                    var blurbs = new Blurbs();
+
+                    blurbs.fetch({
+                        success: function(blurbs) {
+
+                            _.each(blurbs.models, function(blurb){
+                                console.log(blurb.get('text'));
+                            });
+
+                            var template = _.template($('#blurb-list-template').html());
+                            var html = template({bs: blurbs.models});
+                            self.$el.html(html);
+                        }
+                    });
+
+                }
+            });
+
+            var blurbListView = new BlurbListView({ model: Blurb });
+
+
+
+            var Router = Backbone.Router.extend({
+                routes: {
+                    "" : "home"
+                }
+            });
+
+            var router = new Router();
+            router.on('route:home', function(){
+                console.log('route:home');
+                blurbListView.render();
+            });
+
+
+
+            Backbone.history.start();
+
         //})();
 
     </script>
+
+    <script type="text/template" id="blurb-list-template">
+        <h4>Blurb List</h4>
+        <ul>
+            <% _.each(bs, function(blurb) { %>
+            <li><%= blurb.get('text') %></li>
+            <% }); %>
+        </ul>
+    </script>
+
 {% endblock %}

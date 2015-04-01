@@ -25,6 +25,8 @@ class BlurbController extends FOSRestController implements ClassResourceInterfac
         $em = $this->getDoctrine()->getManager();
         $entities = $em->getRepository('ApiBundle:Blurb')->findAll();
 
+        return $entities;
+
         return array(
             'blurbs' => $entities,
         );
