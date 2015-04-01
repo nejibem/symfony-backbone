@@ -1,19 +1,34 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
-        <meta charset="UTF-8" />
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
         <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+
+        {% block stylesheets %}
+            {% stylesheets
+                '@AppBundle/Resources/public/vendor/bootstrap/css/bootstrap.css'
+                filter='cssrewrite'
+            %}
+            <link rel="stylesheet" href="{{ asset_url }}" />
+            {% endstylesheets %}
+        {% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
     <body>
-        {% block body %}{% endblock %}
+        <div class="container">
+            {% block body %}{% endblock %}
+        </div>
 
         {% block javascripts %}
             {% javascripts
                 '@AppBundle/Resources/public/vendor/underscore/underscore.js'
                 '@AppBundle/Resources/public/vendor/jquery/jquery-2.1.3.js'
-                '@AppBundle/Resources/public/vendor/backbone/backbone.js' %}
+                '@AppBundle/Resources/public/vendor/backbone/backbone.js'
+                '@AppBundle/Resources/public/vendor/bootstrap/js/bootstrap.js'
+            %}
                 <script src="{{ asset_url }}"></script>
             {% endjavascripts %}
         {% endblock %}

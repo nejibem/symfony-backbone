@@ -36,14 +36,14 @@
 - name: symfony ensure cache directory
   action: file dest=/var/www/{{ site_url }}/app/cache/ state=directory owner={{ ansible_ssh_user }} group=www-data mode=0775 recurse=yes
 
+- name: symfony clear cache for {{ env }}
+  command: php app/console cache:clear --env={{ env }} chdir=/var/www/{{ site_url }}
+
 - name: symfony install assets for {{ env }}
   command: php app/console assets:install web --env={{ env }} chdir=/var/www/{{ site_url }}
 
 - name: symfony dump assets for {{ env }}
   command: php app/console assetic:dump --env={{ env }} chdir=/var/www/{{ site_url }}
-
-- name: symfony clear cache for {{ env }}
-  command: php app/console cache:clear --env={{ env }} chdir=/var/www/{{ site_url }}
 
 - name: doctrine generate migrations
   command: php app/console doctrine:migrations:migrate --env={{ env }} --no-interaction chdir=/var/www/{{ site_url }}
