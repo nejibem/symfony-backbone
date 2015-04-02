@@ -5,14 +5,6 @@
     <h1>Homepage</h1>
     <hr>
     <div id="blurb-add">
-        <form id="blurb-add-form">
-            <div class="form-group">
-                <textarea name="text" class="form-control" rows="3"></textarea>
-            </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-default">Submit</button>
-            </div>
-        </form>
     </div>
     <div id="blurb-list">
     </div>
@@ -68,11 +60,21 @@
 
 
 
-
-            var BlurbAddView = Backbone.View.extend({
-                el: '#blurb-add',
+            var BlurbListView = Backbone.View.extend({
+                el: '#blurb-list',
+                blurbs: new Blurbs(),
                 events: {
                     'submit #blurb-add-form': 'saveBlurb'
+                },
+
+                initialize: function() {
+                    var self = this;
+                    this.blurbs.fetch({
+                        success: function(blurbs) {
+                            console.log(blurbs);
+                            self.render();
+                        }
+                    });
                 },
 
                 saveBlurb: function (ev) {
@@ -83,52 +85,23 @@
                     var blurbDetails = $(ev.currentTarget).serializeObject();
                     console.log(blurbDetails);
 
-                    var blurb = new Blurb();
-                    blurb.save(blurbDetails, {
-                        success: function (blurb) {
-                            console.log('start save');
-                            //$("#blurb-add-form textarea").val('');
-                            blurbs.add(blurb);
-                            //router.navigate('added/'+blurb.id, {trigger: true});
-                            //blurbListView.render();
-                            console.log('end save');
-                        },
-                        error: function (blurb) {
-                            console.log('blurb save error!');
-                        }
-                    });
+                    //var blurb = new Blurb();
+                    this.blurbs.create(blurbDetails);
+                    this.render();
                     console.log('saveBlurb end');
                     //return false;
                 },
 
                 render: function() {
-                    console.log('BlurbAddView render');
-                    //var self = this;
-                    //var html = $('#blurb-add-template').html();
-                    //console.log(html);
-                    //self.$el.html(html);
-                }
-
-            });
-
-            var blurbAddView = new BlurbAddView({ model: Blurb });
-
-            var BlurbListView = Backbone.View.extend({
-                el: '#blurb-list',
-
-                render: function() {
-                    var self = this;
-                    var blurbs = new Blurbs();
-                    blurbs.fetch({
-                        success: function(blurbs) {
-                            _.each(blurbs.models, function(blurb){
-                                console.log(blurb.get('text'));
-                            });
-                            var template = _.template($('#blurb-list-template').html());
-                            var html = template({bs: blurbs.models});
-                            self.$el.html(html);
-                        }
-                    });
+                    if( this.blurbs.length > 0 )
+                    {
+                        _.each(this.blurbs.models, function(blurb) {
+                            console.log(blurb.get('text'));
+                        });
+                        var template = _.template($('#blurb-list-template').html());
+                        var html = template({bs: this.blurbs.models});
+                        this.$el.html(html);
+                    }
                 }
             });
 
@@ -147,13 +120,6 @@
             router.on('route:home', function(){
                 console.log('route:home');
                 blurbListView.render();
-                blurbAddView.render();
-            });
-
-            router.on('route:added', function(){
-                console.log('route:added');
-                blurbListView.render();
-                blurbAddView.render();
             });
 
             Backbone.history.start();
@@ -163,6 +129,14 @@
     </script>
 
     <script type="text/template" id="blurb-list-template">
+        <form id="blurb-add-form">
+            <div class="form-group">
+                <textarea name="text" class="form-control" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-default">Submit</button>
+            </div>
+        </form>
         <h3>Blurb List</h3>
         <ul>
             <% _.each(bs, function(blurb) { %>
