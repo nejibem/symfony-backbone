@@ -79,6 +79,7 @@
                     console.log('saveBlurb');
                     ev.preventDefault();
 
+                    var self = this;
                     var blurbDetails = $(ev.currentTarget).serializeObject();
                     console.log(blurbDetails);
 
@@ -86,8 +87,10 @@
                     blurb.save(blurbDetails, {
                         success: function (blurb) {
                             console.log('start save');
-                            $("#add-blurb-form textarea").html('');
-                            router.navigate('added/'+blurb.id, {trigger: true});
+                            //$("#blurb-add-form textarea").val('');
+                            blurbs.add(blurb);
+                            //router.navigate('added/'+blurb.id, {trigger: true});
+                            //blurbListView.render();
                             console.log('end save');
                         },
                         error: function (blurb) {
