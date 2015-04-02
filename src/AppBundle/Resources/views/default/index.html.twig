@@ -4,8 +4,6 @@
 
     <h1>Homepage</h1>
     <hr>
-    <div id="blurb-add">
-    </div>
     <div id="blurb-list">
     </div>
 
@@ -55,7 +53,24 @@
                 url: '/api/blurbs',
                 initialize: function() {
                     console.log("Blurb Collection is initialized");
+                    this.sort_key = 'id';
+                },
+                comparator: function(a, b) {
+                    a = a.get(this.sort_key);
+                    b = b.get(this.sort_key);
+                    return a > b ? -1
+                         : a < b ?  1
+                         :          0;
+                },
+                sortById: function() {
+                    this.sort_key = 'id';
+                    this.sort();
+                },
+                sortByText: function() {
+                    this.sort_key = 'text';
+                    this.sort();
                 }
+
             });
 
 
@@ -69,6 +84,7 @@
 
                 initialize: function() {
                     var self = this;
+                    //this.listenTo(this.blurbs, 'sort reset', this.render);
                     this.blurbs.fetch({
                         success: function(blurbs) {
                             console.log(blurbs);
@@ -104,11 +120,13 @@
                 render: function() {
                     if( this.blurbs.length > 0 )
                     {
+                        this.blurbs.sortById();
+
                         _.each(this.blurbs.models, function(blurb) {
                             console.log(blurb.get('text'));
                         });
                         var template = _.template($('#blurb-list-template').html());
-                        var html = template({bs: this.blurbs.models});
+                        var html = template({blurbs: this.blurbs.models});
                         this.$el.html(html);
                     }
                 }
@@ -148,8 +166,8 @@
         </form>
         <h3>Blurb List</h3>
         <ul>
-            <% _.each(bs, function(blurb) { %>
-            <li><%= blurb.get('text') %></li>
+            <% _.each(blurbs, function(blurb) { %>
+            <li><%= blurb.get('id') %> :: <%= blurb.get('text') %></li>
             <% }); %>
         </ul>
     </script>
