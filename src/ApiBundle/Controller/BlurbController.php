@@ -71,10 +71,7 @@ class BlurbController extends FOSRestController implements ClassResourceInterfac
             return $this->view($entity, Codes::HTTP_CREATED);
         }
 
-        return array(
-            'errors' => $errors,
-        );
-
+        return $this->view(array('errors' => $errors), Codes::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     /**

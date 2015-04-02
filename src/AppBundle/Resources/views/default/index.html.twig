@@ -41,21 +41,21 @@
             };
 
 
-            var Blurbs = Backbone.Collection.extend({
-                //model: Blurb,
-                url: '/api/blurbs',
-                initialize: function() {
-                    console.log("Blurb Collection is initialized");
-                }
-            });
 
             var Blurb = Backbone.Model.extend({
-                collection: Blurbs,
                 defaults: {
                     id: null,
                     text: '...'
                 },
                 urlRoot: '/api/blurbs'
+            });
+
+            var Blurbs = Backbone.Collection.extend({
+                model: Blurb,
+                url: '/api/blurbs',
+                initialize: function() {
+                    console.log("Blurb Collection is initialized");
+                }
             });
 
 
@@ -86,8 +86,17 @@
                     console.log(blurbDetails);
 
                     //var blurb = new Blurb();
-                    this.blurbs.create(blurbDetails);
-                    this.render();
+                    this.blurbs.create(blurbDetails, {
+                        wait: true,
+                        success: function() {
+                            console.log('blurbs.create success!');
+                            self.render();
+                        },
+                        error: function() {
+                            console.log('blurbs.create error!');
+                        }
+                    });
+
                     console.log('saveBlurb end');
                     //return false;
                 },
