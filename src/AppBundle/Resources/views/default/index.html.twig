@@ -105,7 +105,6 @@
                 App.View.BlurbList = Backbone.View.extend({
                     el: '#blurbs',
                     blurbs: new App.Collection.Blurbs(),
-                    template: _.template($('#blurb-list-template').html()),
 
                     initialize: function () {
                         console.log("initialize list");
@@ -149,24 +148,19 @@
                     },
 
                     saveBlurb: function (ev) {
-                        console.log('saveBlurb');
                         ev.preventDefault();
                         var self = this;
                         var blurbDetails = $(ev.currentTarget).serializeObject();
-                        console.log(blurbDetails);
                         this.collection.create(blurbDetails, {
                             wait: true,
                             success: function(blurb) {
                                 console.log('blurbs.create success!');
-                                console.log(blurb);
                                 $('#blurb-add-form textarea').val('');
                             },
                             error: function() {
                                 console.log('blurbs.create error!');
                             }
                         });
-
-                        console.log('saveBlurb end');
                     }
                 });
 
@@ -182,12 +176,7 @@
                 var router = new App.Router();
                 router.on('route:home', function(){
                     console.log('route:home');
-                    //blurbListView.render();
-
-                    blurbFormView.render();
-
                     blurbs.fetch().then(function(){
-                        //blurbAllView.render();
                         blurbListView.render();
                     });
 
@@ -199,12 +188,6 @@
 
         })();
 
-    </script>
-
-    <script type="text/template" id="blurb-list-template">
-
-        <ul id="blurbs">
-        </ul>
     </script>
 
     <script type="text/template" id="blurb-template">
