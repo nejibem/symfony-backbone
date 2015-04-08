@@ -13,8 +13,8 @@
     {{ parent() }}
     <script>
 
-        //(function(){
-        //    "use strict"
+        (function(){
+            "use strict"
 
             console.log('Hello World!');
 
@@ -38,9 +38,14 @@
                 return o;
             };
 
+            window.App = {
+                Model: {},
+                Collection: {},
+                View: {},
+                Router: {}
+            };
 
-
-            var Blurb = Backbone.Model.extend({
+            App.Model.Blurb = Backbone.Model.extend({
                 defaults: {
                     id: null,
                     text: '...'
@@ -48,8 +53,8 @@
                 urlRoot: '/api/blurbs'
             });
 
-            var Blurbs = Backbone.Collection.extend({
-                model: Blurb,
+            App.Collection.Blurbs = Backbone.Collection.extend({
+                model: App.Model.Blurb,
                 url: '/api/blurbs',
                 initialize: function() {
                     console.log("Blurb Collection is initialized");
@@ -74,10 +79,9 @@
             });
 
 
-
-            var BlurbListView = Backbone.View.extend({
+            App.View.BlurbList = Backbone.View.extend({
                 el: '#blurb-list',
-                blurbs: new Blurbs(),
+                blurbs: new App.Collection.Blurbs(),
                 events: {
                     'submit #blurb-add-form': 'saveBlurb'
                 },
@@ -132,18 +136,17 @@
                 }
             });
 
-            var blurbListView = new BlurbListView({ model: Blurb });
+            var blurbListView = new App.View.BlurbList({model: App.Model.Blurb});
 
 
-
-            var Router = Backbone.Router.extend({
+            App.Router = Backbone.Router.extend({
                 routes: {
                     "": "home",
                     "added/:id": "added"
                 }
             });
 
-            var router = new Router();
+            var router = new App.Router();
             router.on('route:home', function(){
                 console.log('route:home');
                 blurbListView.render();
@@ -151,7 +154,7 @@
 
             Backbone.history.start();
 
-        //})();
+        })();
 
     </script>
 
