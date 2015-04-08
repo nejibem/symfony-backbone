@@ -124,6 +124,10 @@
                     },
                     addOne: function(blurb) {
                         console.log('BlurbList::addOne');
+
+                        var d = new Date(blurb.get('created_date'));
+                        blurb.set('date', d.toLocaleDateString() +' '+ d.toLocaleTimeString() );
+
                         var blurbView = new App.View.Blurb({model: blurb});
                         this.$el.append( blurbView.render().el );
                     }
@@ -202,7 +206,7 @@
 
     <script type="text/template" id="blurb-template">
         <p><%= this.model.get('id') %> :: <%= this.model.get('text') %></p>
-        <p><%= this.model.get('created_date') %></p>
+        <p><%= this.model.get('date') %></p>
     </script>
 
 {% endblock %}
