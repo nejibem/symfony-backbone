@@ -4,7 +4,19 @@
 
     <h1>Homepage</h1>
     <hr>
-    <div id="blurb-list">
+
+    <form id="blurb-add-form">
+        <div class="form-group">
+            <textarea name="text" class="form-control" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-default">Submit</button>
+        </div>
+    </form>
+
+    <h3>Blurb List</h3>
+    <div>
+        <ul id="blurbs"></ul>
     </div>
 
 {% endblock %}
@@ -13,8 +25,8 @@
     {{ parent() }}
     <script>
 
-        (function(){
-            "use strict"
+        //(function(){
+        //    "use strict"
 
             console.log('Hello World!');
 
@@ -79,42 +91,74 @@
                     }
 
                 });
+                var blurbs = new App.Collection.Blurbs();
 
+                App.View.Blurb = Backbone.View.extend({
+                    tagName: 'li',
+                    template: _.template($('#blurb-template').html()),
+                    render: function() {
+                        this.$el.html(this.template({blurbs: this.model}));
+                        return this;
+                    }
+                });
 
                 App.View.BlurbList = Backbone.View.extend({
-                    el: '#blurb-list',
+                    el: '#blurbs',
                     blurbs: new App.Collection.Blurbs(),
                     template: _.template($('#blurb-list-template').html()),
 
-                    events: {
-                        'submit #blurb-add-form': 'saveBlurb'
+                    initialize: function () {
+                        console.log("initialize list");
+                        _.bindAll(this, 'render');
+                        this.collection.on('sync', this.render);
                     },
 
-                    initialize: function() {
+                    render: function() {
+                        console.log('BlurbList::render');
                         var self = this;
-                        //this.listenTo(this.blurbs, 'sort reset', this.render);
-                        this.blurbs.fetch({
-                            success: function(blurbs) {
-                                console.log(blurbs);
-                                self.render();
-                            }
-                        });
+                        $(this.el).empty();
+                        if( this.collection )
+                        {
+                            this.collection.each(function(blurb){
+                                self.addOne(blurb);
+                            });
+                        }
+                        return this;
+                    },
+
+                    addOne: function(blurb) {
+                        console.log('BlurbList::addOne');
+                        var blurbView = new App.View.Blurb({model: blurb});
+                        this.$el.append( blurbView.render().el );
+                    }
+
+                });
+
+                var blurbListView = new App.View.BlurbList({collection: blurbs});
+
+                App.View.BlurbForm = Backbone.View.extend({
+                    el: '#blurb-add-form',
+                    events: {
+                        'submit': 'saveBlurb'
+                    },
+
+                    initialize: function () {
+                        console.log("initialize form");
+                        _.bindAll(this, 'render');
+                        this.collection.on('add', this.render);
                     },
 
                     saveBlurb: function (ev) {
                         console.log('saveBlurb');
                         ev.preventDefault();
-
                         var self = this;
                         var blurbDetails = $(ev.currentTarget).serializeObject();
                         console.log(blurbDetails);
-
-                        //var blurb = new Blurb();
-                        this.blurbs.create(blurbDetails, {
+                        this.collection.create(blurbDetails, {
                             wait: true,
-                            success: function() {
+                            success: function(blurb) {
                                 console.log('blurbs.create success!');
-                                self.render();
+                                console.log(blurb);
                             },
                             error: function() {
                                 console.log('blurbs.create error!');
@@ -122,24 +166,10 @@
                         });
 
                         console.log('saveBlurb end');
-                        //return false;
-                    },
-
-                    render: function() {
-                        if( this.blurbs.length > 0 )
-                        {
-                            this.blurbs.sortById();
-
-                            _.each(this.blurbs.models, function(blurb) {
-                                console.log(blurb.get('text'));
-                            });
-                            this.$el.html(this.template({blurbs: this.blurbs.models}));
-                        }
                     }
                 });
 
-                var blurbListView = new App.View.BlurbList({model: App.Model.Blurb});
-
+                var blurbFormView = new App.View.BlurbForm({collection: blurbs});
 
                 App.Router = Backbone.Router.extend({
                     routes: {
@@ -151,32 +181,33 @@
                 var router = new App.Router();
                 router.on('route:home', function(){
                     console.log('route:home');
-                    blurbListView.render();
+                    //blurbListView.render();
+
+                    blurbFormView.render();
+
+                    blurbs.fetch().then(function(){
+                        //blurbAllView.render();
+                        blurbListView.render();
+                    });
+
                 });
 
                 Backbone.history.start();
 
             });
 
-        })();
+        //})();
 
     </script>
 
     <script type="text/template" id="blurb-list-template">
-        <form id="blurb-add-form">
-            <div class="form-group">
-                <textarea name="text" class="form-control" rows="3"></textarea>
-            </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-default">Submit</button>
-            </div>
-        </form>
-        <h3>Blurb List</h3>
-        <ul>
-            <% _.each(blurbs, function(blurb) { %>
-            <li><%= blurb.get('id') %> :: <%= blurb.get('text') %></li>
-            <% }); %>
+
+        <ul id="blurbs">
         </ul>
+    </script>
+
+    <script type="text/template" id="blurb-template">
+        <%= this.model.get('id') %> :: <%= this.model.get('text') %>
     </script>
 
 {% endblock %}
