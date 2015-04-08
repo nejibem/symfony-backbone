@@ -16,7 +16,7 @@
 
     <h3>Blurb List, (<span id="blurb-count"></span>)</h3>
     <div>
-        <ul id="blurbs"></ul>
+        <div id="blurbs"></div>
     </div>
 
 {% endblock %}
@@ -93,7 +93,8 @@
                 });
 
                 App.View.Blurb = Backbone.View.extend({
-                    tagName: 'li',
+                    tagName: 'div',
+                    className: 'blurb',
                     template: _.template($('#blurb-template').html()),
                     render: function() {
                         this.$el.html(this.template({blurbs: this.model}));

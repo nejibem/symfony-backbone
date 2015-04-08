@@ -1,0 +1,13 @@
+#blurbs {
+    border: 1px solid #BBB;
+    color: #333;
+}
+
+#blurbs .blurb {
+    border-bottom: 1px solid #BBB;
+    padding: 15px;
+}
+
+#blurbs .blurb:last-child {
+    border-bottom: none;
+}
