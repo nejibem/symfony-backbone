@@ -14,7 +14,7 @@
         </div>
     </form>
 
-    <h3>Blurb List, <small>count <span id="blurb-count"></span></small></h3>
+    <h3>Blurb List, (<span id="blurb-count"></span>)</h3>
     <div>
         <ul id="blurbs"></ul>
     </div>
@@ -91,7 +91,6 @@
                     }
 
                 });
-                var blurbs = new App.Collection.Blurbs();
 
                 App.View.Blurb = Backbone.View.extend({
                     tagName: 'li',
@@ -133,8 +132,6 @@
 
                 });
 
-                var blurbListView = new App.View.BlurbList({collection: blurbs});
-
                 App.View.BlurbForm = Backbone.View.extend({
                     el: '#blurb-add-form',
                     events: {
@@ -164,8 +161,6 @@
                     }
                 });
 
-                var blurbFormView = new App.View.BlurbForm({collection: blurbs});
-
                 App.View.BlurbCount = Backbone.View.extend({
                     el: '#blurb-count',
                     tagName: 'span',
@@ -174,12 +169,10 @@
                         this.collection.on('add', this.render);
                     },
                     render: function() {
-                        this.$el.text(this.collection.size());
+                        this.$el.text('count '+ this.collection.size());
                         return this;
                     }
                 });
-
-                var blurbCountView = new App.View.BlurbCount({collection: blurbs});
 
                 App.Router = Backbone.Router.extend({
                     routes: {
@@ -189,8 +182,15 @@
                 });
 
                 var router = new App.Router();
+
                 router.on('route:home', function(){
                     console.log('route:home');
+
+                    var blurbs = new App.Collection.Blurbs();
+                    var blurbListView = new App.View.BlurbList({collection: blurbs});
+                    var blurbFormView = new App.View.BlurbForm({collection: blurbs});
+                    var blurbCountView = new App.View.BlurbCount({collection: blurbs});
+
                     blurbs.fetch().then(function(){
                         blurbListView.render();
                     });
