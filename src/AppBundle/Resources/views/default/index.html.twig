@@ -201,7 +201,8 @@
     </script>
 
     <script type="text/template" id="blurb-template">
-        <%= this.model.get('id') %> :: <%= this.model.get('text') %>
+        <p><%= this.model.get('id') %> :: <%= this.model.get('text') %></p>
+        <p><%= this.model.get('created_date') %></p>
     </script>
 
 {% endblock %}
