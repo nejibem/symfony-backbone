@@ -140,8 +140,8 @@
 
                     initialize: function () {
                         console.log("initialize form");
-                        //_.bindAll(this, 'render');
-                        //this.collection.on('add', this.render);
+                        _.bindAll(this, 'render');
+                        this.collection.on('add', this.render);
                     },
 
                     saveBlurb: function (ev) {
@@ -192,7 +192,7 @@
                     var blurbCountView = new App.View.BlurbCount({collection: blurbs});
 
                     blurbs.fetch().then(function(){
-                        blurbListView.render();
+                        //blurbListView.render();
                     });
 
                 });
