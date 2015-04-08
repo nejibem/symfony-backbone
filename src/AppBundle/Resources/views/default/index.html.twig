@@ -105,13 +105,11 @@
                 App.View.BlurbList = Backbone.View.extend({
                     el: '#blurbs',
                     blurbs: new App.Collection.Blurbs(),
-
                     initialize: function () {
                         console.log("initialize list");
                         _.bindAll(this, 'render');
                         this.collection.on('sync', this.render);
                     },
-
                     render: function() {
                         console.log('BlurbList::render');
                         var self = this;
@@ -124,7 +122,6 @@
                         }
                         return this;
                     },
-
                     addOne: function(blurb) {
                         console.log('BlurbList::addOne');
                         var blurbView = new App.View.Blurb({model: blurb});
@@ -138,16 +135,13 @@
                     events: {
                         'submit': 'saveBlurb'
                     },
-
                     initialize: function () {
                         console.log("initialize form");
                         _.bindAll(this, 'render');
                         this.collection.on('add', this.render);
                     },
-
                     saveBlurb: function (ev) {
                         ev.preventDefault();
-                        var self = this;
                         var blurbDetails = $(ev.currentTarget).serializeObject();
                         this.collection.create(blurbDetails, {
                             wait: true,
