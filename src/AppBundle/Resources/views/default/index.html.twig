@@ -144,8 +144,8 @@
 
                     initialize: function () {
                         console.log("initialize form");
-                        _.bindAll(this, 'render');
-                        this.collection.on('add', this.render);
+                        //_.bindAll(this, 'render');
+                        //this.collection.on('add', this.render);
                     },
 
                     saveBlurb: function (ev) {
@@ -159,6 +159,7 @@
                             success: function(blurb) {
                                 console.log('blurbs.create success!');
                                 console.log(blurb);
+                                $('#blurb-add-form textarea').val('');
                             },
                             error: function() {
                                 console.log('blurbs.create error!');
