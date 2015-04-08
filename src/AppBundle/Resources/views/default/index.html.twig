@@ -14,7 +14,7 @@
         </div>
     </form>
 
-    <h3>Blurb List</h3>
+    <h3>Blurb List, <small>count <span id="blurb-count"></span></small></h3>
     <div>
         <ul id="blurbs"></ul>
     </div>
@@ -165,6 +165,21 @@
                 });
 
                 var blurbFormView = new App.View.BlurbForm({collection: blurbs});
+
+                App.View.BlurbCount = Backbone.View.extend({
+                    el: '#blurb-count',
+                    tagName: 'span',
+                    initialize: function() {
+                        _.bindAll(this, 'render');
+                        this.collection.on('add', this.render);
+                    },
+                    render: function() {
+                        this.$el.text(this.collection.size());
+                        return this;
+                    }
+                });
+
+                var blurbCountView = new App.View.BlurbCount({collection: blurbs});
 
                 App.Router = Backbone.Router.extend({
                     routes: {
