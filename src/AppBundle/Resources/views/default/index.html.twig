@@ -45,114 +45,118 @@
                 Router: {}
             };
 
-            App.Model.Blurb = Backbone.Model.extend({
-                defaults: {
-                    id: null,
-                    text: '...'
-                },
-                urlRoot: '/api/blurbs'
-            });
+            $(document).ready(function(){
 
-            App.Collection.Blurbs = Backbone.Collection.extend({
-                model: App.Model.Blurb,
-                url: '/api/blurbs',
-                initialize: function() {
-                    console.log("Blurb Collection is initialized");
-                    this.sort_key = 'id';
-                },
-                comparator: function(a, b) {
-                    a = a.get(this.sort_key);
-                    b = b.get(this.sort_key);
-                    return a > b ? -1
-                         : a < b ?  1
-                         :          0;
-                },
-                sortById: function() {
-                    this.sort_key = 'id';
-                    this.sort();
-                },
-                sortByText: function() {
-                    this.sort_key = 'text';
-                    this.sort();
-                }
+                App.Model.Blurb = Backbone.Model.extend({
+                    defaults: {
+                        id: null,
+                        text: '...'
+                    },
+                    urlRoot: '/api/blurbs'
+                });
 
-            });
-
-
-            App.View.BlurbList = Backbone.View.extend({
-                el: '#blurb-list',
-                blurbs: new App.Collection.Blurbs(),
-                events: {
-                    'submit #blurb-add-form': 'saveBlurb'
-                },
-
-                initialize: function() {
-                    var self = this;
-                    //this.listenTo(this.blurbs, 'sort reset', this.render);
-                    this.blurbs.fetch({
-                        success: function(blurbs) {
-                            console.log(blurbs);
-                            self.render();
-                        }
-                    });
-                },
-
-                saveBlurb: function (ev) {
-                    console.log('saveBlurb');
-                    ev.preventDefault();
-
-                    var self = this;
-                    var blurbDetails = $(ev.currentTarget).serializeObject();
-                    console.log(blurbDetails);
-
-                    //var blurb = new Blurb();
-                    this.blurbs.create(blurbDetails, {
-                        wait: true,
-                        success: function() {
-                            console.log('blurbs.create success!');
-                            self.render();
-                        },
-                        error: function() {
-                            console.log('blurbs.create error!');
-                        }
-                    });
-
-                    console.log('saveBlurb end');
-                    //return false;
-                },
-
-                render: function() {
-                    if( this.blurbs.length > 0 )
-                    {
-                        this.blurbs.sortById();
-
-                        _.each(this.blurbs.models, function(blurb) {
-                            console.log(blurb.get('text'));
-                        });
-                        var template = _.template($('#blurb-list-template').html());
-                        var html = template({blurbs: this.blurbs.models});
-                        this.$el.html(html);
+                App.Collection.Blurbs = Backbone.Collection.extend({
+                    model: App.Model.Blurb,
+                    url: '/api/blurbs',
+                    initialize: function() {
+                        console.log("Blurb Collection is initialized");
+                        this.sort_key = 'id';
+                    },
+                    comparator: function(a, b) {
+                        a = a.get(this.sort_key);
+                        b = b.get(this.sort_key);
+                        return a > b ? -1
+                             : a < b ?  1
+                             :          0;
+                    },
+                    sortById: function() {
+                        this.sort_key = 'id';
+                        this.sort();
+                    },
+                    sortByText: function() {
+                        this.sort_key = 'text';
+                        this.sort();
                     }
-                }
+
+                });
+
+
+                App.View.BlurbList = Backbone.View.extend({
+                    el: '#blurb-list',
+                    blurbs: new App.Collection.Blurbs(),
+                    template: _.template($('#blurb-list-template').html()),
+
+                    events: {
+                        'submit #blurb-add-form': 'saveBlurb'
+                    },
+
+                    initialize: function() {
+                        var self = this;
+                        //this.listenTo(this.blurbs, 'sort reset', this.render);
+                        this.blurbs.fetch({
+                            success: function(blurbs) {
+                                console.log(blurbs);
+                                self.render();
+                            }
+                        });
+                    },
+
+                    saveBlurb: function (ev) {
+                        console.log('saveBlurb');
+                        ev.preventDefault();
+
+                        var self = this;
+                        var blurbDetails = $(ev.currentTarget).serializeObject();
+                        console.log(blurbDetails);
+
+                        //var blurb = new Blurb();
+                        this.blurbs.create(blurbDetails, {
+                            wait: true,
+                            success: function() {
+                                console.log('blurbs.create success!');
+                                self.render();
+                            },
+                            error: function() {
+                                console.log('blurbs.create error!');
+                            }
+                        });
+
+                        console.log('saveBlurb end');
+                        //return false;
+                    },
+
+                    render: function() {
+                        if( this.blurbs.length > 0 )
+                        {
+                            this.blurbs.sortById();
+
+                            _.each(this.blurbs.models, function(blurb) {
+                                console.log(blurb.get('text'));
+                            });
+                            this.$el.html(this.template({blurbs: this.blurbs.models}));
+                        }
+                    }
+                });
+
+                var blurbListView = new App.View.BlurbList({model: App.Model.Blurb});
+
+
+                App.Router = Backbone.Router.extend({
+                    routes: {
+                        "": "home",
+                        "added/:id": "added"
+                    }
+                });
+
+                var router = new App.Router();
+                router.on('route:home', function(){
+                    console.log('route:home');
+                    blurbListView.render();
+                });
+
+                Backbone.history.start();
+
             });
-
-            var blurbListView = new App.View.BlurbList({model: App.Model.Blurb});
-
-
-            App.Router = Backbone.Router.extend({
-                routes: {
-                    "": "home",
-                    "added/:id": "added"
-                }
-            });
-
-            var router = new App.Router();
-            router.on('route:home', function(){
-                console.log('route:home');
-                blurbListView.render();
-            });
-
-            Backbone.history.start();
 
         })();
 
